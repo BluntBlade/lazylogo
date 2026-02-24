@@ -1,9 +1,10 @@
 class Token {
     static NO_MORE = "NO_MORE";
     static NOT_FOUND = "NOT_FOUND";
+    static PROCEDURE = "PROCEDURE";
+    static VARIABLE = "VARIABLE";
     static WORD = "WORD";
     static NUMBER = "NUMBER";
-    static VARIABLE = "VARIABLE";
     static LIST_OPENING = "LIST_OPENING";
     static LIST_CLOSING = "LIST_CLOSING";
     static ARRAY_OPENING = "ARRAY_OPENING";
@@ -21,9 +22,10 @@ class Lexer {
     static HAS_ONE_VALUE = function (m) { return m[1]; };
 
     static PATTERNS = {
+        PROCEDURE:     {"value": Lexer.HAS_ONE_VALUE, "pattern": /^([_A-Za-z][_A-Za-z0-9]*[?]?)$/ },
+        VARIABLE:      {"value": Lexer.HAS_ONE_VALUE, "pattern": /^[:]([_A-Za-z][_A-Za-z0-9]*$)/ },
         WORD:          {"value": Lexer.HAS_ONE_VALUE, "pattern": /^["']([_A-Za-z][_A-Za-z0-9]*)$/ },
         NUMBER:        {"value": Lexer.HAS_ONE_VALUE, "pattern": /^([-+]?(?:[0-9]*\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9]+)?)$/ },
-        VARIABLE:      {"value": Lexer.HAS_ONE_VALUE, "pattern": /^:([_A-Za-z][_A-Za-z0-9]*$)/ },
         LIST_OPENING:  {"value": Lexer.HAS_NO_VALUE,  "pattern": /^\[$/ },
         LIST_CLOSING:  {"value": Lexer.HAS_NO_VALUE,  "pattern": /^\]$/ },
         ARRAY_OPENING: {"value": Lexer.HAS_NO_VALUE,  "pattern": /^\{$/ },
