@@ -1,6 +1,7 @@
 class Token {
     static NO_MORE = "NO_MORE";
     static NOT_FOUND = "NOT_FOUND";
+    static END_OF_LINE = "END_OF_LINE";
     static PROCEDURE = "PROCEDURE";
     static VARIABLE = "VARIABLE";
     static WORD = "WORD";
@@ -38,19 +39,34 @@ class Lexer {
         SIGN_SLASH:    {"value": Lexer.HAS_NO_VALUE,  "pattern": /^\/$/ },
     };
 
-    constructor (s) {
-        this.components = s.split(/\s/);
+    constructor (code) {
+        this.lines = code.trim().split(/\xd?\xa/);
+        this.line_number = 0;
+        this.components = this.lines.length > 0 ? this.lines[0].split(/\s/) : [];
         this.index = 0;
     };
 
     next_token () {
         if (this.index == this.components.length) {
+            if ((this.line_number + 1) == this.lines.length) {
+                return {
+                    "matched": false,
+                    "token": Token.NO_MORE,
+                    "raw": "",
+                };
+            } // if
+
+            // Parse next line.
+            this.line_number += 1;
+            this.components = this.lines[this.line_number].split(/\s/);
+            this.index = 0;
+
             return {
-                "matched": false,
-                "token": Token.NO_MORE,
+                "matched": true,
+                "token": Token.END_OF_LINE,
                 "raw": "",
             };
-        }
+        } // if
 
         const text = this.components[this.index];
         for (const key in Lexer.PATTERNS) {
