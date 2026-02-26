@@ -145,9 +145,7 @@ class Parser {
     //               OUTPUT expr            | # End the running procedure and output the specified value.
     //               STOP                   | # End the running procedure with no output value.
     //               BYE                    | # Terminate the program.
-    // body       => [ statements ]
-    // statements => statement statements   |
-    //               statement
+    // body       => [ blocks ]
     // statement  => PROCEDURE items        | # Call procedure with default number of inputs.
     //               ( PROCEDURE items )      # Call procedure with an arbitrary number of inputs.
     // items      => item items             |
